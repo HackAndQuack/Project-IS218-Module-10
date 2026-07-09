@@ -2,7 +2,7 @@ name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [ '**' ]
   pull_request:
     branches: [ main ]
 
@@ -38,28 +38,27 @@ jobs:
             ${{ runner.os }}-pip-
       
       - name: Install dependencies
-        env:
-          DATABASE_URL: postgresql://user:password@localhost:5432/mytestdb
         run: |
           python -m venv venv
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
-          playwright install  # if you use Playwright for e2e tests
-      
+          playwright install --with-deps chromium
+
       - name: Run tests
         env:
           DATABASE_URL: postgresql://user:password@localhost:5432/mytestdb
         run: |
           source venv/bin/activate
-          
+          mkdir -p test-results
+
           # 1) Unit tests
-          pytest tests/unit/ --cov=src --junitxml=test-results/junit.xml
-          
-          # 2) Integration tests
+          pytest tests/unit/ --cov=app --junitxml=test-results/junit.xml
+
+          # 2) Integration tests (requires the Postgres service above)
           pytest tests/integration/
-          
-          # 3) E2E or other tests
+
+          # 3) E2E tests
           pytest tests/e2e/
 
   security:
@@ -99,8 +98,8 @@ jobs:
         with:
           push: true
           tags: |
-            kaw393939/601_module9:latest
-            kaw393939/601_module9:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/is218-module10-user-api:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/is218-module10-user-api:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
-          cache-from: type=registry,ref=kaw393939/601_module9:cache
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/is218-module10-user-api:cache
           cache-to: type=inline,mode=max
