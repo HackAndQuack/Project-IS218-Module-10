@@ -7,7 +7,7 @@ to Docker Hub on success.
 
 ## Docker Hub
 
-Image: **https://hub.docker.com/r/hackandquack/is218-module10-user-api**
+Image: **https://hub.docker.com/r/hackandquack/601_module10**
 
 ```bash
 docker pull hackandquack/is218-module10-user-api:latest
