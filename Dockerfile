@@ -7,7 +7,7 @@ WORKDIR /app
 
 RUN apt-get update && \
    apt-get upgrade -y && \
-   apt-get install -y --no-install-recommends gcc python3-dev libssl-dev && \
+   apt-get install -y --no-install-recommends gcc python3-dev libssl-dev curl && \
    rm -rf /var/lib/apt/lists/* && \
    python -m pip install --upgrade pip setuptools>=70.0.0 wheel && \
    groupadd -r appgroup && \

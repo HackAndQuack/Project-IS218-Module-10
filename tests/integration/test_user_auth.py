@@ -16,7 +16,7 @@ def test_password_hashing(db_session, fake_user_data):
         last_name=fake_user_data['last_name'],
         email=fake_user_data['email'],
         username=fake_user_data['username'],
-        password=hashed
+        password_hash=hashed
     )
     
     assert user.verify_password(original_password) is True
