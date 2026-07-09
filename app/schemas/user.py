@@ -3,8 +3,8 @@ from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, ConfigDict
 
-class UserResponse(BaseModel):
-    """Schema for user response data"""
+class UserRead(BaseModel):
+    """Schema for returning user details (omits password_hash)"""
     id: UUID
     username: str
     email: EmailStr
@@ -16,6 +16,10 @@ class UserResponse(BaseModel):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)  # Enable mapping from ORM objects
+
+
+# Backwards-compatible alias used elsewhere in the app/tests
+UserResponse = UserRead
 
 
 class Token(BaseModel):
